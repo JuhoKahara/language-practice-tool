@@ -33,7 +33,7 @@ def select_action(action):
     match action.lower():
         case '1':
             card_list = database.view_cards()
-            return review.start_review(card_list)
+            return review.start_review(database)
 
         case '2':
             front = input('Front: ')

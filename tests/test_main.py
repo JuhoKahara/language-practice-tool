@@ -21,7 +21,8 @@ def setup_database():
         CREATE TABLE Decks (
             deckid INTEGER PRIMARY KEY,
             name TEXT NOT NULL,
-            is_active INTEGER NOT NULL
+            is_active INTEGER NOT NULL,
+            total_reviews INTEGER NOT NULL
         )
         '''
     )
@@ -32,26 +33,25 @@ def setup_database():
             cardid INTEGER PRIMARY KEY,
             front TEXT NOT NULL,
             back TEXT NOT NULL,
-            last_answered TEXT,
-            first_answered TEXT,
-            correct_reviews INTEGER NOT NULL,
-            total_reviews INTEGER NOT NULL,
-            carddeck INTEGER,
+            last_correct_answer INTEGER,
+            streak INTEGER NOT NULL,
+            carddeck INTEGER NOT NULL,
             FOREIGN KEY(carddeck) REFERENCES Decks(deckid)
         )
         '''
     )
     yield connection
+    connection.close()
 
 @pytest.fixture(autouse=True)
 def insert_card(setup_database):
     cursor = setup_database
-    cursor.execute('INSERT INTO Cards (front, back, correct_reviews, total_reviews, carddeck) VALUES ("test", "testi", 0, 0, 1)')
+    cursor.execute('INSERT INTO Cards (front, back, streak, carddeck) VALUES ("test", "testi", 0, 1)')
 
 @pytest.fixture(autouse=True)
 def setup_test_data(setup_database, insert_card):
     cursor = setup_database
-    cursor.execute('INSERT INTO Decks (name, is_active) VALUES ("default", 1)')
+    cursor.execute('INSERT INTO Decks (name, is_active, total_reviews) VALUES ("default", 1, 0)')
     yield cursor
 
 # TESTS
@@ -77,8 +77,8 @@ def test_select_action_out_of_bounds():
     assert main.select_action('9') == None
 
 # TODO
-def test_select_action_one():
-    assert main.select_action('1') == 'Initiating review protocol.'
+#def test_select_action_one():
+#    assert main.select_action('1') == 'Initiating review protocol.'
 
 def test_select_action_two(monkeypatch):
     front = 'test two'

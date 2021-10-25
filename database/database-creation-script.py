@@ -13,7 +13,8 @@ cursor.execute(
     CREATE TABLE Decks (
         deckid INTEGER PRIMARY KEY,
         name TEXT NOT NULL,
-        is_active INTEGER NOT NULL
+        is_active INTEGER NOT NULL,
+        total_reviews INTEGER NOT NULL
     )
     '''
 )
@@ -24,11 +25,9 @@ cursor.execute(
         cardid INTEGER PRIMARY KEY,
         front TEXT NOT NULL,
         back TEXT NOT NULL,
-        last_answered TEXT,
-        first_answered TEXT,
-        correct_reviews INTEGER NOT NULL,
-        total_reviews INTEGER NOT NULL,
-        carddeck INTEGER,
+        last_correct_answer INTEGER,
+        streak INTEGER NOT NULL,
+        carddeck INTEGER NOT NULL,
         FOREIGN KEY(carddeck) REFERENCES Decks(deckid)
     )
     '''
@@ -43,8 +42,8 @@ cursor.execute(
     '''
 )
 
-cursor.execute('INSERT INTO Decks (name, is_active) VALUES ("default", 1)')
-cursor.execute('INSERT INTO Cards (front, back, correct_reviews, total_reviews, carddeck) VALUES ("this is an", "example card", 0, 0, 1)')
+cursor.execute('INSERT INTO Decks (name, is_active, total_reviews) VALUES ("default", 1, 0)')
+cursor.execute('INSERT INTO Cards (front, back, streak, carddeck) VALUES ("test", "testi", 0, 1)')
 
 connection.commit()
 connection.close()
