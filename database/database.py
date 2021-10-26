@@ -3,35 +3,63 @@ import sqlite3
 cursor = ''
 
 # Card queries
-def add_card(front, back):
-    """Adds cards to the currently active deck.
-    :param front: Determines what is displayed on the front side of the card
-    :param back: Determines what is displayed on the back side of the card
-    """
-    check_for_duplicate = query('''SELECT * FROM Cards 
-                                WHERE front=:front OR back=:back
-                                OR front=:back OR back=:front
-                                ''', front.lower(), back.lower())
+def check_for_duplicate(front, back):
+    return query('''SELECT * FROM Cards 
+                                    WHERE front=:front OR back=:back
+                                    OR front=:back OR back=:front
+                                    ''', front.lower(), back.lower())
 
-    if check_for_duplicate:
-        id = check_for_duplicate[0]
-        front = check_for_duplicate[1]
-        back = check_for_duplicate[2]
-        return f'Card is too similar to another card. (Card {id}, {front} | {back})'
-    else:
-        query('''INSERT INTO Cards (front, back, streak, carddeck) 
-                VALUES (:front, :back, 0, 1)
-                ''', front, back
-                )
-        return f'Added card: {front} | {back}'
+def add_cards():
+    """Adds cards to the currently active deck."""
+    is_running = 'y'
+
+    while is_running.startswith('y'):
+        front = input('Front: ')
+        back = input('Back: ')
+
+        duplicate = check_for_duplicate(front, back)
+
+        if (front or back).startswith('!'):
+            print('A card may not start with an exclamation mark (!)')
+        elif duplicate:
+            id = duplicate['cardid']
+            front = duplicate['front']
+            back = duplicate['back']
+            print(f'Card is too similar to another card. (Card {id}, {front} | {back})')
+        else:
+            query('''INSERT INTO Cards (front, back, streak, carddeck) 
+                    VALUES (:front, :back, 0, 1)
+                    ''', front, back
+            )
+            print(f'Added card: {front} | {back}')
+        is_running = input('Continue adding cards? (y/n)')
+    return 'Finished adding cards.'
 
 def view_cards():
     """Display cards in the currently active deck."""
     return query('SELECT * FROM Cards WHERE carddeck = 1')
 
 def set_last_correct_answer(cardid):
+    """Used to determine when the card was last reviewed based on the total card reviews done in the deck."""
     total_reviews = get_total_reviews()
-    query('UPDATE Cards SET last_correct_answer = :total_reviews WHERE cardid = :cardid', total_reviews, cardid)
+    query('UPDATE Cards SET last_correct_answer = :total_reviews WHERE cardid = :cardid', total_reviews[0][0], cardid)
+
+def reset_last_correct_answer(cardid):
+    """Resets the last_correct_answer value to Null"""
+    query('UPDATE Cards SET last_correct_answer = NULL WHERE cardid = :cardid', cardid)
+
+def get_last_correct_answer(cardid):
+    """Returns the review count of when the specified card was last answered correctly."""
+    return query('SELECT last_correct_answer FROM Cards WHERE cardid = :cardid', cardid)[0]
+
+def get_streak(cardid):
+    return query('SELECT streak FROM Cards WHERE cardid = :cardid', cardid)[0]
+
+def increment_streak(cardid):
+    query('UPDATE Cards SET streak = streak + 1 WHERE cardid = :cardid', cardid)
+
+def reset_streak(cardid):
+    query('UPDATE Cards SET streak = 0 WHERE cardid = :cardid', cardid)
 
 # Deck queries
 def choose_deck():

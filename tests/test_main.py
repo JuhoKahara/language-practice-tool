@@ -83,9 +83,10 @@ def test_select_action_out_of_bounds():
 def test_select_action_two(monkeypatch):
     front = 'test two'
     back = 'testi kaksi'
-    responses = iter([front, back])
+    responses = iter([front, back, 'n'])
     monkeypatch.setattr('builtins.input', lambda _: next(responses))
-    assert main.select_action('2') == f'Added card: {front} | {back}'
+    #assert main.select_action('2') == f'Added card: {front} | {back}'
+    assert main.select_action('2') == 'Finished adding cards.'
 
 def test_select_action_three():
     assert main.select_action('3') == f'Card 1, test | testi\n'

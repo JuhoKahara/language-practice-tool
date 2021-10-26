@@ -1,5 +1,5 @@
 import sys
-sys.path.insert(1, './database')
+sys.path.insert(1, 'D:/code/projects/language-practice-tool/database')
 
 import sqlite3
 import database
@@ -36,9 +36,7 @@ def select_action(action):
             return review.start_review(database)
 
         case '2':
-            front = input('Front: ')
-            back = input('Back: ')
-            return database.add_card(front, back)
+            return database.add_cards()
 
         case '3':
             cards = database.view_cards()
