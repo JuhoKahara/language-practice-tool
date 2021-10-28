@@ -1,4 +1,4 @@
-import sqlite3
+from translations import get_string, toggle_language
 
 cursor = ''
 
@@ -14,26 +14,26 @@ def add_cards():
     is_running = 'y'
 
     while is_running.startswith('y'):
-        front = input('Front: ')
-        back = input('Back: ')
+        front = input(get_string('front'), ': ')
+        back = input(get_string('back'), ': ')
 
         duplicate = check_for_duplicate(front, back)
 
         if (front or back).startswith('!'):
-            print('A card may not start with an exclamation mark (!)')
+            print(get_string('errorExclamationMark'))
         elif duplicate:
             id = duplicate['cardid']
             front = duplicate['front']
             back = duplicate['back']
-            print(f'Card is too similar to another card. (Card {id}, {front} | {back})')
+            print(f'{get_string("errorCardTooSimilar")}. ({get_string("card")} {id}, {front} | {back})')
         else:
             query('''INSERT INTO Cards (front, back, streak, carddeck) 
                     VALUES (:front, :back, 0, 1)
                     ''', front, back
             )
             print(f'Added card: {front} | {back}')
-        is_running = input('Continue adding cards? (y/n)')
-    return 'Finished adding cards.'
+        is_running = input(get_string('continueAdding'), '? (y/n)')
+    return get_string('finishAdding')
 
 def view_cards():
     """Display cards in the currently active deck."""
@@ -67,12 +67,12 @@ def choose_deck():
     query_result = query('SELECT * FROM Decks')
     for row in query_result:
         print(row)
-    return 'Selecting deck.'
+    return None
 
 def new_deck(name):
     """Creates a new deck."""
     query('INSERT INTO Decks (name, is_active, total_reviews) VALUES (:name, 0, 0)', name)
-    return f'Created a new deck named {name}.'
+    return f'{get_string("createdDeck")} {name}.'
 
 def get_deck_name():
     """Returns the name of the currently active deck."""
@@ -87,11 +87,14 @@ def increment_total_reviews():
 # Other stuff
 def options():
     """Provides access to user preferences."""
-    return 'Accessing user preferences.'
+    if input(get_string('options')) == '1':
+        toggle_language()
+        return get_string('toggledLanguage')
+    return None
 
 def statistics():
     """Returns statistics of past user performance."""
-    return 'Accessing user statistics.'
+    return None
 
 def set_cursor(c):
     global cursor
