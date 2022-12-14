@@ -24,7 +24,7 @@ strings = {
             4. Choose deck      8. Quit
             ''',
         fi: f'''
-            1. Aloita harjoitus     5. Uusi pakka
+            1. Aloita kertaus       5. Uusi pakka
             2. Lisää kortteja       6. Asetukset
             3. Tarkastele kortteja  7. Statistiikkaa
             4. Valitse pakka        8. Sulje ohjelma
@@ -89,11 +89,11 @@ strings = {
         fi: 'Pistetilanne'
     },
     'beginReview': {
-        en: 'Review has begun. You may quit by typing the command "!quit"',
+        en: 'The review has begun. You may quit by typing the command "!quit"',
         fi: 'Harjoitus on alkanut. Voit lopettaa komennolla "!quit"'
     },
     'endOfReview': {
-        en: 'Review has ended',
+        en: 'The review has ended',
         fi: 'Harjoitus on ohi'
     },
     'typeAnswer': {
@@ -131,5 +131,9 @@ strings = {
     'createdDeck': {
         en: 'Created a new deck named',
         fi: 'Luotu uusi korttipakka nimeltään'
+    },
+    'returnToMenu': {
+        en: 'Return to main menu by pressing enter',
+        fi: 'Palaa takaisin päävalikkoon painamalla enter-painiketta'
     }
 }

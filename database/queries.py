@@ -14,8 +14,8 @@ def add_cards():
     is_running = 'y'
 
     while is_running.startswith('y'):
-        front = input(get_string('front'), ': ')
-        back = input(get_string('back'), ': ')
+        front = input(get_string('front') + ': ')
+        back = input(get_string('back') + ': ')
 
         duplicate = check_for_duplicate(front, back)
 
@@ -32,7 +32,7 @@ def add_cards():
                     ''', front, back
             )
             print(f'Added card: {front} | {back}')
-        is_running = input(get_string('continueAdding'), '? (y/n)')
+        is_running = input(get_string('continueAdding') + '? (y/n)')
     return get_string('finishAdding')
 
 def view_cards():

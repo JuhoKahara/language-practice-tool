@@ -3,7 +3,7 @@ sys.path.insert(1, 'D:/code/projects/language-practice-tool/database')
 
 import os
 import sqlite3
-import queries
+import database.queries as queries
 import review
 
 from translations import get_string
@@ -48,7 +48,7 @@ def select_action(action):
             return queries.choose_deck()
 
         case '5':
-            name = input(get_string('deckName'),': ')
+            name = input(get_string('deckName') + ': ')
             return queries.new_deck(name)
 
         case '6':
@@ -71,9 +71,11 @@ def main():
         while is_running:
             clear_screen()
             print(menu())
-            action = input(get_string('selectAction'),': ')
+            action = input(get_string('selectAction') + ': ')
             clear_screen()
             print(select_action(action))
+            if action != '8':
+                input(get_string('returnToMenu') + ' ')
     finally:
         connection.commit()
         connection.close()
