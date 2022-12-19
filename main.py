@@ -1,22 +1,22 @@
-import sys
-sys.path.insert(1, 'D:/code/projects/language-practice-tool/database')
-
 import os
+import sys
 import sqlite3
 import database.queries as queries
 import review
 
 from translations import get_string
 
+sys.path.insert(1, os.getcwd() + '/database')
 is_running = True
 db = r'./database/database.db'
 
 def clear_screen():
+    """Clears the console"""
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def menu():
     """Returns the menu to be printed."""
-    print(get_string('activeDeck'), queries.get_deck_name())
+    print(get_string('currentlyActiveDeck'), queries.get_deck_name())
     return (get_string('menu'))
 
 def quit():
@@ -31,7 +31,6 @@ def select_action(action):
 
     match action.lower():
         case '1':
-            card_list = queries.view_cards()
             return review.start_review(queries)
 
         case '2':

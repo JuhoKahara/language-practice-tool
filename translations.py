@@ -44,7 +44,7 @@ strings = {
         'en': 'Language set to English', 
         'fi': 'Kieli vaihdettu Suomeksi'
     },
-    'activeDeck': {
+    'currentlyActiveDeck': {
         en: 'Currently active deck: ',
         fi: 'Nykyinen pakka: '
     },
