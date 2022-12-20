@@ -9,8 +9,8 @@ def increment_correct_answers():
     correct_answers += 1
 
 def correct_answer(card: tuple):
-    database.set_last_correct_answer(card[0])
-    database.increment_streak(card[0])
+    database.cards.set_last_correct_answer(card[0])
+    database.cards.increment_streak(card[0])
     increment_correct_answers()
     return get_string('correct') + '.\n'
 
@@ -20,11 +20,11 @@ def incorrect_answer(card):
 
     if mark_as_correct.startswith('y'):
         increment_correct_answers()
-        database.increment_streak(card[0])
+        database.cards.increment_streak(card[0])
         return get_string('markedAsCorrect')
     
-    database.reset_last_correct_answer(card[0])
-    database.reset_streak(card[0])
+    database.cards.reset_last_correct_answer(card[0])
+    database.cards.reset_streak(card[0])
     return get_string('markedAsIncorrect')
 
 def display_score(card_list):
@@ -41,9 +41,7 @@ def start_review(db):
     database = db
     correct_answers = 0
     is_running = True
-    card_list = database.view_cards()
-
-    print(type(database))
+    card_list = database.cards.view_cards()
 
     while is_running:
         print(get_string('beginReview'))
@@ -51,7 +49,7 @@ def start_review(db):
             print('Front: ', card[1])
             answer = input(get_string('typeAnswer') + ': ').lower()
             if answer != '!quit':
-                database.increment_total_reviews()
+                database.decks.increment_total_reviews()
                 if answer == card[2]:
                     print(correct_answer(card))
                 else:

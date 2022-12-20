@@ -1,8 +1,7 @@
-from translations import get_string, toggle_language
+from translations import get_string
+from . import query
+import database.queries.decks as decks
 
-cursor = ''
-
-# Card queries
 def check_for_duplicate(front, back):
     """Checks if a word is already used in a card
         
@@ -52,8 +51,8 @@ def view_cards():
 def set_last_correct_answer(cardid: str) -> str:
     """Determines when the card was last reviewed based on the total card reviews done in the deck
         Args:
-            cardid (str): """
-    total_reviews = get_total_reviews()
+            cardid (str): the ID of the card"""
+    total_reviews = decks.get_total_reviews()
     query('UPDATE Cards SET last_correct_answer = :total_reviews WHERE cardid = :cardid', total_reviews[0][0], cardid)
 
 def reset_last_correct_answer(cardid):
@@ -72,50 +71,3 @@ def increment_streak(cardid):
 
 def reset_streak(cardid):
     query('UPDATE Cards SET streak = 0 WHERE cardid = :cardid', cardid)
-
-# Deck queries
-def choose_deck():
-    """Selects the deck to set as currently active."""
-    query_result = query('SELECT * FROM Decks')
-    for row in query_result:
-        print(row)
-    return None
-
-def new_deck(name):
-    """Creates a new deck."""
-    query('INSERT INTO Decks (name, is_active, total_reviews) VALUES (:name, 0, 0)', name)
-    return f'{get_string("createdDeck")} {name}.'
-
-def get_deck_name():
-    """Returns the name of the currently active deck."""
-    return query('SELECT name FROM Decks WHERE is_active = 1')[0][0]
-
-def get_total_reviews():
-    return query('SELECT total_reviews FROM Decks WHERE is_active = 1')
-
-def increment_total_reviews():
-    query('UPDATE Decks SET total_reviews = total_reviews + 1 WHERE is_active = 1')
-
-# Other stuff
-def options():
-    """Provides access to user preferences."""
-    if input(get_string('options')) == '1':
-        toggle_language()
-        return get_string('toggledLanguage')
-    return None
-
-def statistics():
-    """Returns statistics of past user performance."""
-    return None
-
-def set_cursor(c):
-    global cursor
-    cursor = c
-
-def query(query, *args):
-    if args:
-        return cursor.execute(query, args).fetchone()
-    else:
-        return cursor.execute(query).fetchall()
-
-    

@@ -1,7 +1,10 @@
 import os
 import sys
 import sqlite3
-import database.queries as queries
+import database.queries
+import database.queries.cards as cards
+import database.queries.decks as decks
+import database.queries.others as others
 import review
 
 from translations import get_string
@@ -18,7 +21,7 @@ def menu():
     """Prints the menu
         Returns: 
             The menu (str) to be printed"""
-    print(get_string('currentlyActiveDeck'), queries.get_deck_name())
+    print(get_string('currentlyActiveDeck'), decks.get_deck_name())
     return get_string('menu')
 
 def quit():
@@ -37,31 +40,31 @@ def select_action(action: str) -> str:
 
     match action.lower():
         case '1':
-            return review.start_review(queries)
+            return review.start_review(database.queries)
 
         case '2':
             
-            return queries.add_cards()
+            return cards.add_cards()
 
         case '3':
-            cards = queries.view_cards()
+            card_list = cards.view_cards()
             string = ''
-            for card in cards:
+            for card in card_list:
                 string += f'{get_string("card")} {card[0]}, {card[1]} | {card[2]}\n'
             return string
 
         case '4':
-            return queries.choose_deck()
+            return decks.choose_deck()
 
         case '5':
             name = input(get_string('deckName') + ': ')
-            return queries.new_deck(name)
+            return decks.new_deck(name)
 
         case '6':
-            return queries.options()
+            return others.options()
 
         case '7':
-            return queries.statistics()
+            return others.statistics()
 
         case '8':
             return quit()
@@ -73,7 +76,7 @@ def main():
     """The main loop"""
     try:
         connection = sqlite3.connect(db)
-        queries.set_cursor(connection.cursor())
+        database.queries.set_cursor(connection.cursor())
 
         while is_running:
             clear_screen()
