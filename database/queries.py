@@ -4,13 +4,23 @@ cursor = ''
 
 # Card queries
 def check_for_duplicate(front, back):
-    return query('''SELECT * FROM Cards 
-                                    WHERE front=:front OR back=:back
-                                    OR front=:back OR back=:front
-                                    ''', front.lower(), back.lower())
+    """Checks if a word is already used in a card
+        
+        Args:
+            front (str): The 'front' (question) of the card
+            back (str): The 'back' (answer) of the card
+            
+        Returns:
+            Query result of duplicates if there are any"""
+    return query('''SELECT * 
+                    FROM Cards 
+                    WHERE front = :front 
+                        OR back=:back
+                        OR front=:back 
+                        OR back=:front''', front.lower(), back.lower())
 
 def add_cards():
-    """Adds cards to the currently active deck."""
+    """Adds cards to the currently active deck"""
     is_running = 'y'
 
     while is_running.startswith('y'):
@@ -36,11 +46,13 @@ def add_cards():
     return get_string('finishAdding')
 
 def view_cards():
-    """Display cards in the currently active deck."""
+    """Displays cards in the currently active deck"""
     return query('SELECT * FROM Cards WHERE carddeck = 1')
 
-def set_last_correct_answer(cardid):
-    """Used to determine when the card was last reviewed based on the total card reviews done in the deck."""
+def set_last_correct_answer(cardid: str) -> str:
+    """Determines when the card was last reviewed based on the total card reviews done in the deck
+        Args:
+            cardid (str): """
     total_reviews = get_total_reviews()
     query('UPDATE Cards SET last_correct_answer = :total_reviews WHERE cardid = :cardid', total_reviews[0][0], cardid)
 

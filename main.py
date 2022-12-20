@@ -15,18 +15,24 @@ def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def menu():
-    """Returns the menu to be printed."""
+    """Prints the menu
+        Returns: 
+            The menu (str) to be printed"""
     print(get_string('currentlyActiveDeck'), queries.get_deck_name())
-    return (get_string('menu'))
+    return get_string('menu')
 
 def quit():
-    """Quits the program."""
+    """Quits the program
+        Returns:
+            A string with a heartfelt farewell message"""
     global is_running
     is_running = False
     return get_string('goodbye')
 
-def select_action(action):
-    """Chooses the action according to the input from the user."""
+def select_action(action: str) -> str:
+    """Chooses the action according to the input from the user
+        Args:
+            action (str): the action chosen by the user of the program"""
     global is_running
 
     match action.lower():
@@ -34,6 +40,7 @@ def select_action(action):
             return review.start_review(queries)
 
         case '2':
+            
             return queries.add_cards()
 
         case '3':
@@ -63,6 +70,7 @@ def select_action(action):
             return None
 
 def main():
+    """The main loop"""
     try:
         connection = sqlite3.connect(db)
         queries.set_cursor(connection.cursor())

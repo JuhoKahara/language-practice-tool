@@ -3,11 +3,17 @@ en = 'en'
 fi = 'fi'
 
 def toggle_language():
+    """Toggles the language of the program between the two available languages"""
     global language
     current_language = language
     language = 'fi' if current_language == 'en' else 'en'
 
-def get_string(string):
+def get_string(string: str) -> str:
+    """Provides the string to be printed with the chosen translation
+        Args:
+            string (str): A string that is linked to the string to be printed
+        Returns:
+            A string"""
     if string not in strings:
         return string
     if language not in strings[string]:
