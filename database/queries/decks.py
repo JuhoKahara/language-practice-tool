@@ -13,6 +13,18 @@ def new_deck(name):
     query('INSERT INTO Decks (name, is_active, total_reviews) VALUES (:name, 0, 0)', name)
     return f'{get_string("createdDeck")} {name}.'
 
+def view_decks():
+    """Displays all decks"""
+    query('SELECT * FROM Decks')
+
+def edit_deck(deckid, name):
+    """Edit deck"""
+    query('UPDATE Decks SET name = :name WHERE deckid = :deckid', name, deckid)
+
+def delete_deck(deckid):
+    """Deletes a deck"""
+    query('DELETE FROM Decks WHERE deckid = :deckid', deckid)
+
 def get_deck_name():
     """Returns the name of the currently active deck."""
     return query('SELECT name FROM Decks WHERE is_active = 1')[0][0]
