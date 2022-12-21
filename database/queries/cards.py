@@ -18,35 +18,21 @@ def check_for_duplicate(front, back):
                         OR front=:back 
                         OR back=:front''', front.lower(), back.lower())
 
-def add_cards():
-    """Adds cards to the currently active deck"""
-    is_running = 'y'
-
-    while is_running.startswith('y'):
-        front = input(get_string('front') + ': ')
-        back = input(get_string('back') + ': ')
-
-        duplicate = check_for_duplicate(front, back)
-
-        if (front or back).startswith('!'):
-            print(get_string('errorExclamationMark'))
-        elif duplicate:
-            id = duplicate['cardid']
-            front = duplicate['front']
-            back = duplicate['back']
-            print(f'{get_string("errorCardTooSimilar")}. ({get_string("card")} {id}, {front} | {back})')
-        else:
-            query('''INSERT INTO Cards (front, back, streak, carddeck) 
+def add_card(front, back):
+    """Adds a card to a deck"""
+    query('''INSERT INTO Cards (front, back, streak, carddeck) 
                     VALUES (:front, :back, 0, 1)
-                    ''', front, back
-            )
-            print(f'Added card: {front} | {back}')
-        is_running = input(get_string('continueAdding') + '? (y/n)')
-    return get_string('finishAdding')
+                    ''', front, back)
 
 def view_cards():
     """Displays cards in the currently active deck"""
     return query('SELECT * FROM Cards WHERE carddeck = 1')
+
+def edit_cards(cardid, front, back):
+    query('UPDATE Cards SET front = :front, back = :back WHERE cardid = :cardid', front, back, cardid)
+
+def delete_cards(cardid):
+    query('DELETE FROM Cards WHERE cardid = :cardid', cardid)
 
 def set_last_correct_answer(cardid: str) -> str:
     """Determines when the card was last reviewed based on the total card reviews done in the deck

@@ -32,6 +32,29 @@ def quit():
     is_running = False
     return get_string('goodbye')
 
+def add_cards():
+    """A loop for adding cards to the currently active deck"""
+    is_running = 'y'
+
+    while is_running.startswith('y'):
+        front = input(get_string('front') + ': ')
+        back = input(get_string('back') + ': ')
+
+        duplicate = cards.check_for_duplicate(front, back)
+
+        if (front or back).startswith('!'):
+            print(get_string('errorExclamationMark'))
+        elif duplicate:
+            id = duplicate['cardid']
+            front = duplicate['front']
+            back = duplicate['back']
+            print(f'{get_string("errorCardTooSimilar")}. ({get_string("card")} {id}, {front} | {back})')
+        else:
+            cards.add_card(front, back)
+            print(f'Added card: {front} | {back}')
+        is_running = input(get_string('continueAdding') + '? (y/n)')
+    return get_string('finishAdding')
+
 def select_action(action: str) -> str:
     """Chooses the action according to the input from the user
         Args:
