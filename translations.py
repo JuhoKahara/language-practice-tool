@@ -37,11 +37,13 @@ strings = {
             '''
     },
     'options': {
-        en: '''----USER OPTIONS----
+        en: f'''
+            ----USER OPTIONS----
             1. Toggle language (English | Finnish)
             2. Return
             ''',
-        fi: '''----KÄYTTÄJÄASETUKSET----
+        fi: f'''
+            ----KÄYTTÄJÄASETUKSET----
             1. Vaihda kieltä (Englanti | Suomi)
             2. Palaa takaisin
             '''

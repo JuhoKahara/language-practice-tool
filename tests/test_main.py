@@ -1,8 +1,9 @@
 import sys
-sys.path.insert(1, './')
+sys.path.insert(1, '../')
 
 import main
-import queries
+import translations
+import database.queries as queries
 import sqlite3
 import pytest
 
@@ -60,7 +61,7 @@ def test_connection(setup_test_data):
     assert len(list(cursor.execute('SELECT * FROM Decks'))) == 1
     assert len(list(cursor.execute('SELECT * FROM Cards'))) == 1
 
-def test_menu():
+def test_menu_en():
     assert main.menu() == f'''
             1. Begin review     5. New deck
             2. Add cards        6. Options
@@ -98,10 +99,18 @@ def test_select_action_four():
 #    assert main.select_action('5') == f'Created a new deck named {name}.'
 
 #def test_select_action_six():
-#    assert main.select_action('6') == None
+#    assert main.select_action('6') == f'''
+#            ----USER OPTIONS----
+#            1. Toggle language (English | Finnish)
+#            2. Return
+#            '''
 
 def test_select_action_seven():
     assert main.select_action('7') == None
 
 def test_select_action_eight():
     assert main.select_action('8') == 'Goodbye'
+
+def test_translation():
+    translations.toggle_language()
+    assert main.select_action('8') == 'Heihei'
