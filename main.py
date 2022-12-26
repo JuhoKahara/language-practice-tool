@@ -41,13 +41,14 @@ def add_cards():
         back = input(get_string('back') + ': ')
 
         duplicate = cards.check_for_duplicate(front, back)
+        print(duplicate)
 
         if (front or back).startswith('!'):
             print(get_string('errorExclamationMark'))
         elif duplicate:
-            id = duplicate['cardid']
-            front = duplicate['front']
-            back = duplicate['back']
+            id = duplicate[0]
+            front = duplicate[1]
+            back = duplicate[2]
             print(f'{get_string("errorCardTooSimilar")}. ({get_string("card")} {id}, {front} | {back})')
         else:
             cards.add_card(front, back)
@@ -66,8 +67,7 @@ def select_action(action: str) -> str:
             return review.start_review(database.queries)
 
         case '2':
-            
-            return cards.add_cards()
+            return add_cards()
 
         case '3':
             card_list = cards.view_cards()

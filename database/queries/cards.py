@@ -14,9 +14,9 @@ def check_for_duplicate(front, back):
     return query('''SELECT * 
                     FROM Cards 
                     WHERE front = :front 
-                        OR back=:back
-                        OR front=:back 
-                        OR back=:front''', front.lower(), back.lower())
+                        OR back = :back
+                        OR front = :back 
+                        OR back = :front''', front.lower(), back.lower())
 
 def add_card(front, back):
     """Adds a card to a deck"""

@@ -75,17 +75,17 @@ def test_quit():
 def test_select_action_out_of_bounds():
     assert main.select_action('0') == None
     assert main.select_action('9') == None
+    assert main.select_action('a') == None
 
 #def test_select_action_one():
 #    assert main.select_action('1') == 'Initiating review protocol.'
 
-#def test_select_action_two(monkeypatch):
-#    front = 'test two'
-#    back = 'testi kaksi'
-#    responses = iter([front, back, 'n'])
-#    monkeypatch.setattr('builtins.input', lambda _: next(responses))
-    #assert main.select_action('2') == f'Added card: {front} | {back}'
-#    assert main.select_action('2') == 'Finished adding cards.'
+def test_select_action_two(monkeypatch):
+    front = 'test two'
+    back = 'toinen testi'
+    responses = iter([front, back, 'n'])
+    monkeypatch.setattr('builtins.input', lambda _: next(responses))
+    assert main.select_action('2') == 'Finished adding cards'
 
 def test_select_action_three():
     assert main.select_action('3') == f'Card 1, test | testi\n'
@@ -93,12 +93,14 @@ def test_select_action_three():
 def test_select_action_four():
     assert main.select_action('4') == None
 
-#def test_select_action_five(monkeypatch):
-#    name = 'a deck of cards'
-#    monkeypatch.setattr('builtins.input', lambda _: name)
-#    assert main.select_action('5') == f'Created a new deck named {name}.'
+def test_select_action_five(monkeypatch):
+    name = 'a deck of cards'
+    monkeypatch.setattr('builtins.input', lambda _: name)
+    assert main.select_action('5') == f'Created a new deck named {name}.'
 
-#def test_select_action_six():
+def test_select_action_six(monkeypatch):
+    monkeypatch.setattr('builtins.input', lambda _: '')
+    assert main.select_action('6') == None
 #    assert main.select_action('6') == f'''
 #            ----USER OPTIONS----
 #            1. Toggle language (English | Finnish)
