@@ -28,6 +28,14 @@ def view_cards():
     """Displays cards in the currently active deck"""
     return query('SELECT * FROM Cards WHERE carddeck = 1')
 
+def search_card_by_text(text: str):
+    """Search cards by text"""
+    return query('SELECT * FROM Cards WHERE front LIKE \'%:text%\'', text)
+
+def search_card_by_id(id: int):
+    """Search cards by ID"""
+    return query('SELECT * FROM Cards WHERE cardid = :id', id)
+
 def edit_cards(cardid, front, back):
     query('UPDATE Cards SET front = :front, back = :back WHERE cardid = :cardid', front, back, cardid)
 

@@ -32,6 +32,7 @@ def quit():
     is_running = False
     return get_string('goodbye')
 
+# Card operations
 def add_cards():
     """A loop for adding cards to the currently active deck"""
     is_running = 'y'
@@ -56,6 +57,30 @@ def add_cards():
         is_running = input(get_string('continueAdding') + '? (y/n)')
     return get_string('finishAdding')
 
+def search_cards():
+    if input('''
+            1. Search by text
+            2. Search by ID ''') == '1':
+        cards.search_card_by_text(input('Search: '))
+
+def update_cards():
+    """A loop for updating cards"""
+    is_running = 'y'
+
+    while is_running.startswith('y'):
+        return None
+
+def delete_cards():
+    """A loop for deleting cards"""
+
+def card_operations():
+    match action.lower():
+        case '1': return add_cards()
+        case '2': return cards.view_cards()
+        case '3': return update_cards()
+        case '4': return delete_cards()
+        case _: return None
+
 def select_action(action: str) -> str:
     """Chooses the action according to the input from the user
         Args:
@@ -65,33 +90,25 @@ def select_action(action: str) -> str:
     match action.lower():
         case '1':
             return review.start_review(database.queries)
-
         case '2':
-            return add_cards()
-
+            return card_operations()
         case '3':
             card_list = cards.view_cards()
             string = ''
             for card in card_list:
                 string += f'{get_string("card")} {card[0]}, {card[1]} | {card[2]}\n'
             return string
-
         case '4':
             return decks.choose_deck()
-
         case '5':
             name = input(get_string('deckName') + ': ')
             return decks.new_deck(name)
-
         case '6':
             return others.options()
-
         case '7':
             return others.statistics()
-
         case '8':
             return quit()
-
         case _:
             return None
 
