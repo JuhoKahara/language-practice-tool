@@ -58,22 +58,28 @@ def add_cards():
     return get_string('finishAdding')
 
 def search_cards():
-    if input('''
-            1. Search by text
-            2. Search by ID ''') == '1':
-        cards.search_card_by_text(input('Search: '))
+    result = None
+    if input(get_string('search')) == '1':
+        result = cards.search_card_by_text(input('Search: '))
+    else:
+        result = cards.search_card_by_id(input('ID: '))
+    return result
 
 def update_cards():
     """A loop for updating cards"""
     is_running = 'y'
 
     while is_running.startswith('y'):
+        print('Card to delete? ')
+        cards = search_cards()
+        print(cards)
         return None
 
 def delete_cards():
     """A loop for deleting cards"""
 
-def card_operations():
+# Menus
+def card_operations(action: str) -> str:
     match action.lower():
         case '1': return add_cards()
         case '2': return cards.view_cards()
@@ -91,7 +97,9 @@ def select_action(action: str) -> str:
         case '1':
             return review.start_review(database.queries)
         case '2':
-            return card_operations()
+            print(get_string('cardMenu'))
+            action = input(get_string('selectAction') + ': ')
+            return card_operations(action)
         case '3':
             card_list = cards.view_cards()
             string = ''
@@ -112,6 +120,7 @@ def select_action(action: str) -> str:
         case _:
             return None
 
+# Main loop
 def main():
     """The main loop"""
     try:

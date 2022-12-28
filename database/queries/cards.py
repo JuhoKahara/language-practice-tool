@@ -2,6 +2,7 @@ from translations import get_string
 from . import query
 import database.queries.decks as decks
 
+# Miscellaneous queries
 def check_for_duplicate(front, back):
     """Checks if a word is already used in a card
         
@@ -18,6 +19,15 @@ def check_for_duplicate(front, back):
                         OR front = :back 
                         OR back = :front''', front.lower(), back.lower())
 
+def search_card_by_text(text: str):
+    """Search cards by text"""
+    return query('SELECT * FROM Cards WHERE front LIKE \'%:text%\'', text)
+
+def search_card_by_id(id: int):
+    """Search cards by ID"""
+    return query('SELECT * FROM Cards WHERE cardid = :id', id)
+
+# CRUD operations
 def add_card(front, back):
     """Adds a card to a deck"""
     query('''INSERT INTO Cards (front, back, streak, carddeck) 
@@ -28,21 +38,14 @@ def view_cards():
     """Displays cards in the currently active deck"""
     return query('SELECT * FROM Cards WHERE carddeck = 1')
 
-def search_card_by_text(text: str):
-    """Search cards by text"""
-    return query('SELECT * FROM Cards WHERE front LIKE \'%:text%\'', text)
-
-def search_card_by_id(id: int):
-    """Search cards by ID"""
-    return query('SELECT * FROM Cards WHERE cardid = :id', id)
-
 def edit_cards(cardid, front, back):
     query('UPDATE Cards SET front = :front, back = :back WHERE cardid = :cardid', front, back, cardid)
 
 def delete_cards(cardid):
     query('DELETE FROM Cards WHERE cardid = :cardid', cardid)
 
-def set_last_correct_answer(cardid: str) -> str:
+# Card property queries
+def set_last_correct_answer(cardid: str):
     """Determines when the card was last reviewed based on the total card reviews done in the deck
         Args:
             cardid (str): the ID of the card"""

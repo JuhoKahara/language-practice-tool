@@ -25,15 +25,40 @@ strings = {
     'menu': {
         en: f'''
             1. Begin review     5. New deck
-            2. Add cards        6. Options
+            2. Card operations  6. Options
             3. View cards       7. Statistics
             4. Choose deck      8. Quit
             ''',
         fi: f'''
             1. Aloita kertaus       5. Uusi pakka
-            2. Lisää kortteja       6. Asetukset
+            2. Käsittele kortteja   6. Asetukset
             3. Tarkastele kortteja  7. Statistiikkaa
             4. Valitse pakka        8. Sulje ohjelma
+            '''
+    },
+    'cardMenu': {
+        en: f'''
+        Card operations
+            1. Add cards
+            2. View cards
+            3. Update cards
+            4. Delete cards
+            ''',
+        fi: f'''
+        Korttien käsittely
+            1. Lisää kortteja
+            2. Tarkastele kortteja
+            3. Muokkaa kortteja
+            4. Poista kortteja'''
+    },
+    'search': {
+        en: f'''
+            1. Search by text
+            2. Search by ID
+            ''',
+        fi: f'''
+            1. Etsi tekstillä
+            2. Etsi ID:llä
             '''
     },
     'options': {
@@ -49,8 +74,8 @@ strings = {
             '''
     },
     'toggledLanguage': { 
-        'en': 'Language set to English', 
-        'fi': 'Kieli vaihdettu Suomeksi'
+        en: 'Language set to English', 
+        fi: 'Kieli vaihdettu Suomeksi'
     },
     'currentlyActiveDeck': {
         en: 'Currently active deck: ',
