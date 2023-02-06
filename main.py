@@ -1,5 +1,6 @@
 import os
 import sys
+import csv
 import sqlite3
 import database.queries
 import database.queries.cards as cards
@@ -33,11 +34,12 @@ def quit():
     return get_string('goodbye')
 
 # Card operations
-def add_cards():
+def add_cards(front='', back=''):
     """A loop for adding cards to the currently active deck"""
     is_running = 'y'
 
     while is_running.startswith('y'):
+        if front == '' 
         front = input(get_string('front') + ': ')
         back = input(get_string('back') + ': ')
 
@@ -78,6 +80,13 @@ def update_cards():
 def delete_cards():
     """A loop for deleting cards"""
 
+def import_cards():
+    """Imports cards from a .csv file"""
+    with open('word_list.csv', newline='\n', encoding='utf-8-sig') as csvfile:
+        reader = csv.reader(csvfile, delimiter=';')
+        for row in reader:
+            add_cards(row[0], row[2])
+
 # Menus
 def card_operations(action: str) -> str:
     match action.lower():
@@ -85,6 +94,7 @@ def card_operations(action: str) -> str:
         case '2': return cards.view_cards()
         case '3': return update_cards()
         case '4': return delete_cards()
+        case '5': return import_cards()
         case _: return None
 
 def select_action(action: str) -> str:
@@ -94,28 +104,28 @@ def select_action(action: str) -> str:
     global is_running
 
     match action.lower():
-        case '1':
+        case '1': # Begin review
             return review.start_review(database.queries)
-        case '2':
+        case '2': # Card operations
             print(get_string('cardMenu'))
             action = input(get_string('selectAction') + ': ')
             return card_operations(action)
-        case '3':
+        case '3': # View cards
             card_list = cards.view_cards()
             string = ''
             for card in card_list:
                 string += f'{get_string("card")} {card[0]}, {card[1]} | {card[2]}\n'
             return string
-        case '4':
+        case '4': # Choose deck
             return decks.choose_deck()
-        case '5':
+        case '5': # New deck
             name = input(get_string('deckName') + ': ')
             return decks.new_deck(name)
-        case '6':
+        case '6': # Options
             return others.options()
-        case '7':
+        case '7': # Statistics
             return others.statistics()
-        case '8':
+        case '8': # Quit
             return quit()
         case _:
             return None

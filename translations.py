@@ -43,6 +43,7 @@ strings = {
             2. View cards
             3. Update cards
             4. Delete cards
+            5. Import cards
             ''',
         fi: f'''
         Korttien käsittely
