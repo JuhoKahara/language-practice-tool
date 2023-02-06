@@ -140,3 +140,4 @@ cython_debug/
 database.db
 changelog.txt
 word_list.csv
+database.db
